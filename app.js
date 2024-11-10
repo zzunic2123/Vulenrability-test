@@ -53,6 +53,8 @@ app.post('/toggle-session-mode', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+const hostname = '0.0.0.0';
+app.listen(PORT, hostname, () => {
+    console.log(`Server running on http://${hostname}:${PORT}`);
 });
+
