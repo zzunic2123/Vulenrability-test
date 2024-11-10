@@ -1,0 +1,36 @@
+<!-- views/search.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SQL Injection Example</title>
+</head>
+<body>
+    <h1>SQL Injection Demo</h1>
+    <form action="/search" method="POST">
+        <label for="query">Enter Username:</label>
+        <input type="text" id="query" name="query">
+        <button type="submit">Search</button>
+    </form>
+    <div>
+        <p> For example type in: <b> ' OR '1'='1 </b></p>
+        <p> Username to search is: <b> admin </b></p>
+    </div>
+
+    <form action="/toggle-sql" method="POST">
+        <label for="toggle">Enable Vulnerable Mode:</label>
+        <input type="checkbox" name="vulnerableMode" onchange="this.form.submit()" <% if (vulnerableMode) { %> checked <% } %> >
+    </form>
+
+    <div id="results">
+        <% if (results) { %>
+            <h2>Results:</h2>
+            <ul>
+                <% results.forEach(result => { %>
+                    <li><%= result.username %></li>
+                <% }) %>
+            </ul>
+        <% } %>
+    </div>
+</body>
+</html>

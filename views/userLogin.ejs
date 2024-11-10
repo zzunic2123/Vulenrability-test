@@ -1,0 +1,67 @@
+<!-- views/userLogin.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form action="/login" method="POST">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        
+        <button type="submit">Log In</button>
+    </form>
+
+    <p> Username: <b>admin</b> Password: <b>pass123</b></p>
+
+    <h2>Session Mode</h2>
+    <form action="/toggle-session-mode" method="POST">
+        <label>
+            <input type="checkbox" name="vulnerable" onchange="this.form.submit()" 
+            <% if (useVulnerableSession) { %> checked <% } %> >
+            Use Vulnerable Session Mode
+        </label>
+    </form>
+    
+    <p>Currently using: 
+        <strong><%= useVulnerableSession ? "Vulnerable" : "Secure" %> Session Mode</strong>
+    </p>
+
+    <% if (useVulnerableSession) { %>
+        <div style="color: red; border: 1px solid red; padding: 10px; margin-top: 10px;">
+            <h3>Warning: Vulnerable Session Mode Active</h3>
+            <p>You are currently in <strong>Vulnerable Session Mode</strong>. In this mode, session IDs are predictable and not secured with HTTP-only or Secure flags.</p>
+            <ul>
+                <li><strong>Session Hijacking Risk:</strong> Predictable session IDs make it easier for attackers to hijack your session.</li>
+                <li><strong>No JavaScript Protection:</strong> Session IDs are accessible via JavaScript, which increases the risk of cross-site scripting (XSS) attacks.</li>
+            </ul>
+            <p><strong>Recommendation:</strong> Switch to Secure Mode for better protection.</p>
+        </div>
+    <% } else { %>
+        <div style="color: green; border: 1px solid green; padding: 10px; margin-top: 10px;">
+            <h3>Secure Session Mode Active</h3>
+            <p>You are currently in <strong>Secure Session Mode</strong>. In this mode, session IDs are randomly generated and protected with HTTP-only and Secure flags.</p>
+            <ul>
+                <li><strong>Session IDs are secure:</strong> Session IDs are random, making them difficult to predict.</li>
+                <li><strong>JavaScript Protection:</strong> Session cookies are marked with HTTP-only and Secure flags, preventing access from JavaScript.</li>
+            </ul>
+            <p>This mode is recommended for safe browsing.</p>
+        </div>
+    <% } %>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('sessionId');
+        const mode = urlParams.get('mode');
+
+        if (sessionId) {
+            alert(`Logged in with ${mode === 'vulnerable' ? 'Vulnerable' : 'Secure'} Session Mode. Session ID: ${sessionId}`);
+        }
+    </script>
+</body>
+</html>
